@@ -90,7 +90,7 @@ jobs:
 
       - name: Extrai metadados (tags, labels) para o Docker
         id: meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: ghcr.io/${{ env.REPO_OWNER }}/carteira-backend
           tags: |
@@ -110,7 +110,7 @@ jobs:
       
       - name: Extrai metadados para o Frontend
         id: meta-frontend
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: ghcr.io/${{ env.REPO_OWNER }}/carteira-frontend
           tags: |
