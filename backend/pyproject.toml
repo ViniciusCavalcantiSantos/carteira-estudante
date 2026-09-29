@@ -5,16 +5,16 @@ description = "Backend for Carteira Estudantil Web IFPE"
 requires-python = ">=3.11"
 dependencies = [
     "fastapi==0.141.1",
-    "uvicorn[standard]==0.53.0",
-    "sqlalchemy==2.0.54",
+    "uvicorn[standard]==0.54.0",
+    "sqlalchemy==2.1.0",
     "pydantic==2.13.5",
     "pydantic-settings==2.15.0",
     "python-multipart==0.0.32",
-    "httpx2==2.13.0",
+    "httpx2==2.13.1",
     "wheel>=0.46.2",
     "jaraco-context>=6.1.0",
     "msgpack>=1.2.1",
-    "pyjwt==2.14.0",
+    "pyjwt==2.15.0",
     "psycopg==3.3.6",
 ]
 
