@@ -36,8 +36,8 @@ jobs:
           context: ./backend
           load: true 
           tags: carteira-estudante-backend:latest,carteira-backend:latest
-          cache-from: type=gha,scope=${{ github.workflow }}-trivy
-          cache-to: type=gha,mode=max,scope=${{ github.workflow }}-trivy
+          cache-from: type=gha,scope=${{ github.workflow }}-backend-trivy
+          cache-to: type=gha,mode=max,scope=${{ github.workflow }}-backend-trivy
 
       - name: Inicia os Contêineres (Sem Build)
         run: docker compose up -d --no-build db backend
@@ -113,8 +113,8 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha,scope=${{ github.workflow }}-push
-          cache-to: type=gha,mode=max,scope=${{ github.workflow }}-push
+          cache-from: type=gha,scope=${{ github.workflow }}-backend-push
+          cache-to: type=gha,mode=max,scope=${{ github.workflow }}-backend-push
       
       - name: Extrai metadados para o Frontend
         id: meta-frontend
@@ -133,8 +133,8 @@ jobs:
           context: ./frontend
           load: true 
           tags: carteira-frontend:latest
-          cache-from: type=gha,scope=${{ github.workflow }}-trivy
-          cache-to: type=gha,mode=max,scope=${{ github.workflow }}-trivy
+          cache-from: type=gha,scope=${{ github.workflow }}-frontend-trivy
+          cache-to: type=gha,mode=max,scope=${{ github.workflow }}-frontend-trivy
 
       - name: Análise de Segurança (Trivy) - Frontend
         uses: aquasecurity/trivy-action@master
@@ -154,5 +154,5 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta-frontend.outputs.tags }}
           labels: ${{ steps.meta-frontend.outputs.labels }}
-          cache-from: type=gha,scope=${{ github.workflow }}-push
-          cache-to: type=gha,mode=max,scope=${{ github.workflow }}-push
+          cache-from: type=gha,scope=${{ github.workflow }}-frontend-push
+          cache-to: type=gha,mode=max,scope=${{ github.workflow }}-frontend-push
