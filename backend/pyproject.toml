@@ -14,7 +14,7 @@ dependencies = [
     "wheel>=0.46.2",
     "jaraco-context>=6.1.0",
     "msgpack>=1.2.1",
-    "pyjwt==2.15.0",
+    "pyjwt==2.15.1",
     "psycopg==3.3.6",
 ]
 
