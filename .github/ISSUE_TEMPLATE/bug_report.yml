@@ -1,0 +1,55 @@
+name: "🐛 Relato de Bug"
+description: Reporte um problema na aplicação ou na infraestrutura.
+title: "[BUG]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado por ajudar a melhorar o Carteira do Estudante. Não inclua senhas, tokens ou dados pessoais nos logs.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: Descrição do problema
+      description: O que aconteceu e o que você esperava que acontecesse?
+      placeholder: Descreva o comportamento observado.
+    validations:
+      required: true
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Passos para reproduzir
+      description: Liste os passos necessários para reproduzir o problema.
+      placeholder: |
+        1. Inicie a aplicação...
+        2. Acesse...
+        3. Observe o erro...
+    validations:
+      required: true
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Ambiente
+      description: Onde o problema ocorreu?
+      options:
+        - Docker Compose em Linux
+        - Docker Compose em Windows com WSL2
+        - Docker Compose em macOS
+        - Outro
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs e evidências
+      description: Inclua logs relevantes, removendo segredos e dados pessoais.
+      render: shell
+    validations:
+      required: false
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Verificações
+      options:
+        - label: Pesquisei por uma issue existente sobre o mesmo problema.
+          required: true

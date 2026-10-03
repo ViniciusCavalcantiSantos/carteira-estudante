@@ -1,13 +1,33 @@
-**What:**
-[Descreva de forma direta o que foi implementado, corrigido ou alterado]
+## Descrição da alteração
+[Descreva o que foi implementado, corrigido ou alterado.]
 
-**Why:**
-[Explique o motivo dessa alteração e qual problema ela resolve no projeto]
+## Contexto e issue relacionada
+[Explique o problema resolvido e referencie a issue.]
 
-**Test (Peer Review):**
+Closes #
 
-1. Faça o pull desta branch.
-2. [Comando ou passo a passo para testar a funcionalidade localmente]
-3. Confirme que [resultado esperado].
+## Tipo de mudança
+- [ ] `feat`: nova funcionalidade
+- [ ] `fix`: correção de bug ou vulnerabilidade
+- [ ] `docs`: documentação
+- [ ] `refactor`: refatoração
+- [ ] `ci`: CI/CD ou automação
+- [ ] `chore`: manutenção
 
-Closes #[Número da Issue]
+## Validação
+- [ ] Testes e verificações relevantes executados
+- [ ] Frontend validado, quando aplicável
+- [ ] Backend validado, quando aplicável
+- [ ] Docker Compose validado, quando aplicável
+
+Comandos executados e resultado:
+
+```text
+[Inclua os comandos e resultados relevantes.]
+```
+
+## Definition of Done e segurança
+- [ ] Commits seguem Conventional Commits
+- [ ] Nenhum segredo ou dado pessoal foi adicionado
+- [ ] Dependências novas foram avaliadas
+- [ ] Documentação atualizada, quando necessário

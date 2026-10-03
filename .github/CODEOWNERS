@@ -1,0 +1,8 @@
+# Responsável padrão pelo repositório.
+* @guguinhaaax
+
+# Alterações de infraestrutura e automação também exigem revisão do responsável.
+/backend/Dockerfile @guguinhaaax
+/frontend/Dockerfile @guguinhaaax
+/docker-compose*.yml @guguinhaaax
+/.github/workflows/ @guguinhaaax
