@@ -4,9 +4,9 @@ version = "1.0.0"
 description = "Backend for Carteira Estudantil Web IFPE"
 requires-python = ">=3.11"
 dependencies = [
-    "fastapi==0.141.1",
+    "fastapi==0.142.2",
     "uvicorn[standard]==0.54.0",
-    "sqlalchemy==2.1.1",
+    "sqlalchemy==2.1.2",
     "pydantic==2.13.5",
     "pydantic-settings==2.15.0",
     "python-multipart==0.0.32",
