@@ -4,9 +4,11 @@ import datetime
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
+from app.api.dependencies import get_current_user
 from app.core.database import get_db
 from app.models.aluno import Aluno
 from app.models.movimentacao import MovimentacaoPortaria
+from app.models.usuario import UsuarioSistema
 from app.schemas.movimentacao import ScanRequest, ScanResponse
 from app.services.movimentacao_service import (
     determine_next_movement_type,
@@ -25,6 +27,7 @@ router = APIRouter()
 )
 def scan_qr_code(
     request: ScanRequest,
+    current_user: UsuarioSistema = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> ScanResponse:
     # 1. Decode JWT (Raises 400 if expired or invalid)
@@ -60,7 +63,7 @@ def scan_qr_code(
     # 5. Register Movement
     nova_movimentacao = MovimentacaoPortaria(
         aluno_id=aluno.id,
-        usuario_id=request.operator_id,
+        usuario_id=current_user.id,
         tipo=movement_type,
     )
     db.add(nova_movimentacao)

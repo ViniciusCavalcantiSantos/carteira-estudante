@@ -27,7 +27,6 @@ class MovimentacaoResponse(MovimentacaoBase):
 
 class ScanRequest(BaseModel):
     qr_code_hash: str
-    operator_id: int
 
 
 class ScanResponse(BaseModel):
