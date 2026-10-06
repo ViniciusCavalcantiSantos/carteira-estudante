@@ -1,41 +1,57 @@
-# Guia de contribuição
+# Contribuindo com o Carteira do Estudante
 
-Obrigado por contribuir com o Carteira do Estudante. Estas orientações ajudam a manter as alterações revisáveis e rastreáveis.
+Abra uma issue com contexto e critérios de aceite antes de mudanças amplas. Para bugs, informe componente, versão, reprodução e logs sem dados pessoais.
 
-## Fluxo de trabalho
+## Branches, commits e revisão
 
-1. Atualize sua branch `main` antes de começar.
-2. Crie uma branch para a alteração; não faça commits diretamente em `main`.
-3. Abra um Pull Request e preencha o template, incluindo a issue relacionada e as validações executadas.
-4. Aguarde os checks e a revisão antes do merge.
+Crie uma branch a partir da `main` atualizada do repositório de destino. Use nomes como `feat/student-search`, `fix/login-validation`, `ci/container-scan` ou `docs/contributing`. Abra PRs pequenos e descreva problema, solução e evidências pelo template.
 
-Use nomes descritivos, por exemplo `feat/student-search`, `fix/login-validation`, `ci/harden-workflow` ou `docs/contributing-guide`.
+Use Conventional Commits nos commits e no título do PR: `feat(api): adiciona consulta de movimentações`, `fix(frontend): corrige validação do login` ou `ci: restringe permissões de publicação`. Em squash merges, preserve esse padrão na mensagem final.
 
-## Commits
+Aguarde a CI e a revisão do mantenedor. `CODEOWNERS` identifica o responsável; exigir aprovação e impedir merge com falhas depende de configurar regras de proteção no GitHub. Na configuração dos checks obrigatórios, selecione o check final **CI gate** exibido na execução.
 
-Use Conventional Commits no formato `<tipo>(<escopo opcional>): <descrição>`.
+No fork, `origin` deve apontar para sua conta e `upstream` para o projeto institucional. Confira explicitamente o repositório base do PR.
 
-Exemplos:
+## Desenvolvimento local
 
-- `feat(api): adiciona consulta de movimentações`
-- `fix(frontend): corrige validação do formulário de login`
-- `ci(actions): fixa versão da action do Trivy`
-- `docs: documenta o fluxo de contribuição`
+O backend usa Python 3.11 e uv; o frontend usa Node.js 24 e npm. Os lockfiles fazem parte da alteração de dependências: atualize `backend/uv.lock` com uv e `frontend/package-lock.json` com npm. A CI rejeita um lockfile Python incompatível com o manifesto.
 
-## Validação local
+Para a aplicação, configure um `.env` local a partir de `.env.example` e use `docker compose up --build`. Não publique o arquivo de ambiente.
 
-Execute as verificações relevantes para os arquivos alterados. Para subir a aplicação com Docker Compose, configure o `.env` local a partir do `.env.example` e execute `docker compose up --build`. Não versione `.env` nem inclua credenciais ou dados pessoais nos logs e nas issues.
+### Testes em banco descartável
 
-Para validar componentes individualmente:
+A fixture de pytest executa `drop_all` e `create_all`. **Nunca aponte os testes para bancos de desenvolvimento com dados importantes, homologação ou produção.**
 
-- Backend: `docker compose exec backend ruff check .` e `docker compose exec backend pytest`.
-- Frontend: em `frontend/`, execute `npm ci` e `npm run lint --if-present`.
+Use o Compose exclusivo dos testes, que não monta os volumes da aplicação nem expõe o banco:
 
-Inclua no Pull Request os comandos executados e seus resultados. Se uma validação não se aplicar, explique o motivo.
+```bash
+docker compose -p carteira-tests -f .github/compose.ci.yml up --build --abort-on-container-exit --exit-code-from backend-tests
+docker compose -p carteira-tests -f .github/compose.ci.yml down --volumes
+```
 
-## Revisão e segurança
+O código de saída do primeiro comando é o resultado dos testes. Execute a limpeza mesmo se os testes falharem.
 
-- Mantenha cada Pull Request focado e vinculado a uma issue quando aplicável.
-- Não inclua tokens, senhas, chaves privadas ou dados pessoais.
-- Avalie dependências novas e atualizações relevantes.
-- Aguarde a aprovação dos responsáveis indicados em `CODEOWNERS` e a aprovação dos checks antes do merge.
+Outras verificações:
+
+```bash
+cd backend
+uv sync --locked
+uv run --no-sync ruff check .
+```
+
+```bash
+cd frontend
+npm ci
+npm audit --audit-level=high
+npm exec -- next typegen
+npm exec -- tsc --noEmit --incremental false
+npm run build
+```
+
+O frontend não possui script de lint; TypeScript e build são verificações reais e não equivalem a ESLint.
+
+## Segurança e evidências
+
+Não inclua tokens, senhas, dados de estudantes ou QR codes válidos em arquivos, issues, PRs ou relatórios. Para possíveis vulnerabilidades, use o canal privado indicado pelos mantenedores; não publique detalhes de exploração ou segredos em issues.
+
+A CI salva resultados de pytest, Semgrep, Bandit, Trivy e ZAP. Informe no PR links ou resultados reais; não marque um check como aprovado apenas porque seu YAML foi validado. Consulte [a documentação da esteira](docs/ci-cd.md) para limites dos scanners, publicação e recuperação.

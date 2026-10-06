@@ -1,8 +1,9 @@
-name: CI - Quality and Security
+name: CI
 
 on:
   push:
     branches: [main]
+    tags: ['v*.*.*']
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -11,136 +12,23 @@ permissions:
   contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  backend-checks:
-    name: Backend checks
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    env:
-      DATABASE_URL: postgresql+psycopg://postgres:postgres@localhost:5432/carteira_test
-      SECRET_KEY: ci-only-test-secret
-    services:
-      postgres:
-        image: postgres:15-alpine
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: carteira_test
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U postgres -d carteira_test"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
+  quality:
+    name: Quality
+    uses: ./.github/workflows/quality.yml
 
-      - name: Set up Python
-        uses: actions/setup-python@v7
-        with:
-          python-version: '3.11'
-
-      - name: Set up uv and dependency cache
-        uses: astral-sh/setup-uv@v6
-        with:
-          enable-cache: true
-          cache-dependency-glob: backend/uv.lock
-
-      - name: Install backend dependencies
-        working-directory: backend
-        run: uv sync --frozen --all-groups
-
-      - name: Ruff
-        working-directory: backend
-        run: uv run ruff check .
-
-      - name: Bandit
-        working-directory: backend
-        run: uvx bandit -r app/ -ll -ii
-
-      - name: Backend tests
-        working-directory: backend
-        run: uv run pytest
-
-  frontend-checks:
-    name: Frontend checks
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-
-      - name: Set up Node.js and npm cache
-        uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-          cache: npm
-          cache-dependency-path: frontend/package-lock.json
-
-      - name: Install frontend dependencies
-        working-directory: frontend
-        run: npm ci
-
-      - name: Frontend lint
-        working-directory: frontend
-        run: npm run lint --if-present
-
-      - name: Frontend production build
-        working-directory: frontend
-        run: npm run build
-
-  semgrep:
-    name: SAST with Semgrep
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-
-      - name: Scan source with Semgrep
-        uses: semgrep/semgrep-action@v1
-        with:
-          config: >-
-            p/owasp-top-ten
-            p/security-audit
-          auditOn: push
-
-  container-scan:
-    name: Build and scan containers
-    needs: [backend-checks, frontend-checks, semgrep]
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-
-      - name: Build backend image
-        run: docker build --tag carteira-backend:ci ./backend
-
-      - name: Scan backend image with Trivy
-        uses: aquasecurity/trivy-action@0.28.0
-        with:
-          image-ref: carteira-backend:ci
-          format: table
-          exit-code: '1'
-          ignore-unfixed: true
-          vuln-type: os,library
-          severity: CRITICAL,HIGH
-
-      - name: Build frontend image
-        run: docker build --tag carteira-frontend:ci ./frontend
-
-      - name: Scan frontend image with Trivy
-        uses: aquasecurity/trivy-action@0.28.0
-        with:
-          image-ref: carteira-frontend:ci
-          format: table
-          exit-code: '1'
-          ignore-unfixed: true
-          vuln-type: os,library
-          severity: CRITICAL,HIGH
+  publish:
+    name: Publish validated images
+    needs: quality
+    if: github.event_name == 'push'
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/publish-images.yml
+    with:
+      source_sha: ${{ github.sha }}
+      version: ${{ github.ref_name }}
+      publish_latest: ${{ github.ref == 'refs/heads/main' }}

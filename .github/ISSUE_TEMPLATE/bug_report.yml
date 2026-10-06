@@ -1,55 +1,69 @@
-name: "🐛 Relato de Bug"
-description: Reporte um problema na aplicação ou na infraestrutura.
+name: Relato de bug
+description: Ajude a reproduzir um problema na aplicação ou na infraestrutura.
 title: "[BUG]: "
-labels: ["bug", "triage"]
 body:
   - type: markdown
     attributes:
       value: |
-        Obrigado por ajudar a melhorar o Carteira do Estudante. Não inclua senhas, tokens ou dados pessoais nos logs.
-  - type: textarea
-    id: what-happened
+        Não publique senhas, tokens JWT, QR codes válidos, matrículas ou outros dados pessoais. Remova esses dados também das capturas e dos logs.
+  - type: dropdown
+    id: component
     attributes:
-      label: Descrição do problema
-      description: O que aconteceu e o que você esperava que acontecesse?
-      placeholder: Descreva o comportamento observado.
+      label: Componente afetado
+      options:
+        - Backend / API
+        - Frontend / interface
+        - Banco de dados
+        - Docker / CI / publicação
+        - Não sei
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Versão ou commit
+      description: Informe a tag da imagem ou o resultado de git rev-parse HEAD.
     validations:
       required: true
   - type: textarea
-    id: steps-to-reproduce
+    id: actual
+    attributes:
+      label: Comportamento observado
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Comportamento esperado
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
     attributes:
       label: Passos para reproduzir
-      description: Liste os passos necessários para reproduzir o problema.
       placeholder: |
-        1. Inicie a aplicação...
-        2. Acesse...
-        3. Observe o erro...
+        1. Inicie a aplicação com...
+        2. Acesse a tela ou endpoint...
+        3. Observe...
     validations:
       required: true
-  - type: dropdown
+  - type: input
     id: environment
     attributes:
       label: Ambiente
-      description: Onde o problema ocorreu?
-      options:
-        - Docker Compose em Linux
-        - Docker Compose em Windows com WSL2
-        - Docker Compose em macOS
-        - Outro
+      description: Sistema operacional, arquitetura, navegador e versões de Docker/Compose, quando aplicável.
     validations:
       required: true
   - type: textarea
-    id: logs
+    id: evidence
     attributes:
-      label: Logs e evidências
-      description: Inclua logs relevantes, removendo segredos e dados pessoais.
-      render: shell
-    validations:
-      required: false
+      label: Logs sanitizados
+      description: Inclua a mensagem exata e, para falhas de CI, o link da execução.
+      render: text
   - type: checkboxes
-    id: checks
+    id: previous-search
     attributes:
-      label: Verificações
+      label: Antes de enviar
       options:
-        - label: Pesquisei por uma issue existente sobre o mesmo problema.
+        - label: Pesquisei issues semelhantes e removi informações sensíveis.
           required: true

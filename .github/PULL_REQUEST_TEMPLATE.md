@@ -1,33 +1,21 @@
-## Descrição da alteração
-[Descreva o que foi implementado, corrigido ou alterado.]
+## Problema e mudança
+Descreva o comportamento anterior, o resultado esperado e por que esta solução foi escolhida.
 
-## Contexto e issue relacionada
-[Explique o problema resolvido e referencie a issue.]
-
-Closes #
-
-## Tipo de mudança
-- [ ] `feat`: nova funcionalidade
-- [ ] `fix`: correção de bug ou vulnerabilidade
-- [ ] `docs`: documentação
-- [ ] `refactor`: refatoração
-- [ ] `ci`: CI/CD ou automação
-- [ ] `chore`: manutenção
+## Issue relacionada
+Informe o link, se existir. Use `Closes #123` somente quando este PR resolver a issue por completo.
 
 ## Validação
-- [ ] Testes e verificações relevantes executados
-- [ ] Frontend validado, quando aplicável
-- [ ] Backend validado, quando aplicável
-- [ ] Docker Compose validado, quando aplicável
+Liste os comandos/checks executados, resultados e evidências. Explique verificações não executadas ou não aplicáveis.
 
-Comandos executados e resultado:
+| Verificação | Resultado / evidência |
+| --- | --- |
+| | |
 
-```text
-[Inclua os comandos e resultados relevantes.]
-```
+## Impacto e operação
+Informe mudanças em variáveis, dependências, banco, imagens ou permissões. Para alterações operacionais, descreva como reverter.
 
-## Definition of Done e segurança
-- [ ] Commits seguem Conventional Commits
-- [ ] Nenhum segredo ou dado pessoal foi adicionado
-- [ ] Dependências novas foram avaliadas
-- [ ] Documentação atualizada, quando necessário
+## Checklist
+- [ ] O título segue Conventional Commits e representa a alteração.
+- [ ] Nenhuma credencial, matrícula, QR code válido ou outro dado pessoal foi incluído.
+- [ ] Documentação e instruções de operação foram atualizadas quando necessário.
+- [ ] Registrei as validações executadas e as limitações conhecidas.
