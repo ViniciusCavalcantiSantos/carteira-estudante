@@ -16,6 +16,8 @@ dependencies = [
     "msgpack>=1.2.1",
     "pyjwt==2.15.1",
     "psycopg==3.3.6",
+    "authlib==1.8.0",
+    "itsdangerous>=2.2.0",
 ]
 
 [dependency-groups]
