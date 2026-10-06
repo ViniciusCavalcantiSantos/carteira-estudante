@@ -14,7 +14,7 @@ O frontend também executa `npm audit --audit-level=high` para verificar depend�
 
 ## Publicação
 
-No fluxo institucional, pushes na `main` e em tags `vX.Y.Z` passam pela qualidade antes da publicação. PRs nunca fazem login nem enviam imagens ao GHCR. A compatibilidade com os nomes `carteira-backend` e `carteira-frontend` e com a tag `latest` usada pelo Compose de produção é preservada.
+No fluxo institucional, pushes na `main` passam pela qualidade e pelo Release Please. Imagens são publicadas somente quando uma release é criada, ou na recuperação manual de uma release existente. PRs nunca fazem login nem enviam imagens ao GHCR. Os nomes `carteira-backend` e `carteira-frontend` são preservados; `latest` passa a acompanhar releases estáveis, não cada merge na `main`. Consulte [Releases](releases.md) para exemplos, configuração e recuperação.
 
 `publish-images.yml` constrói backend/frontend em AMD64 e ARM64. Cada imagem é escaneada e salva como artefato por um dia. Somente quando as quatro combinações passam, um job separado recebe `packages: write`, carrega esses mesmos artefatos e publica os manifests. Não há rebuild depois do scan, nem execução de código-fonte no job com permissão de publicação.
 

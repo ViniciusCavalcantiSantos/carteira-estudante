@@ -1,9 +1,6 @@
 name: CI
 
 on:
-  push:
-    branches: [main]
-    tags: ['v*.*.*']
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -19,16 +16,3 @@ jobs:
   quality:
     name: Quality
     uses: ./.github/workflows/quality.yml
-
-  publish:
-    name: Publish validated images
-    needs: quality
-    if: github.event_name == 'push'
-    permissions:
-      contents: read
-      packages: write
-    uses: ./.github/workflows/publish-images.yml
-    with:
-      source_sha: ${{ github.sha }}
-      version: ${{ github.ref_name }}
-      publish_latest: ${{ github.ref == 'refs/heads/main' }}
