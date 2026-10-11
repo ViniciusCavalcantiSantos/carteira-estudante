@@ -33,7 +33,7 @@ export function proxy(request: NextRequest) {
   if (token && pathname === '/') {
     // TODO: Decode JWT role claim and route to the correct dashboard
     // For now, default to /aluno
-    const dashboardUrl = new URL('/aluno', request.url);
+    const dashboardUrl = new URL('/admin', request.url);
     return NextResponse.redirect(dashboardUrl);
   }
 
