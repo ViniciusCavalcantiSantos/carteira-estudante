@@ -12,10 +12,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   // Pegamos a URL atual para saber qual menu deixar "aceso"
   const pathname = usePathname();
   const isActive = (path: string) => pathname?.includes(path);
+  
+  // Como o dashboard é a página raiz (/admin), precisamos dessa verificação extra
+  const isDashboard = pathname === '/admin' || pathname === '/admin/' || isActive('dashboard');
 
   // Define o título do cabeçalho com base na URL
   const getPageTitle = () => {
-    if (isActive('dashboard')) return 'Dashboard';
+    if (isDashboard) return 'Dashboard';
     if (isActive('alunos')) return 'Gestão de Alunos';
     if (isActive('movimentacoes')) return 'Movimentações';
     if (isActive('relatorios')) return 'Relatórios';
@@ -50,7 +53,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </button>
           </div>
           <nav className="p-4 space-y-1">
-            <a href="/admin/dashboard" className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${isActive('dashboard') ? 'bg-white/15 text-white' : 'text-primary-200 hover:bg-white/10 hover:text-white'}`}>Dashboard</a>
+            <a href="/admin" className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${isDashboard ? 'bg-white/15 text-white' : 'text-primary-200 hover:bg-white/10 hover:text-white'}`}>Dashboard</a>
             <a href="/admin/alunos" className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${isActive('alunos') ? 'bg-white/15 text-white' : 'text-primary-200 hover:bg-white/10 hover:text-white'}`}>Alunos</a>
             <a href="/admin/movimentacoes" className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${isActive('movimentacoes') ? 'bg-white/15 text-white' : 'text-primary-200 hover:bg-white/10 hover:text-white'}`}>Movimentações</a>
             <a href="/admin/relatorios" className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${isActive('relatorios') ? 'bg-white/15 text-white' : 'text-primary-200 hover:bg-white/10 hover:text-white'}`}>Relatórios</a>

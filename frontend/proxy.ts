@@ -30,7 +30,7 @@ export function proxy(request: NextRequest) {
   }
 
   // If already authenticated and trying to access the login page → redirect to dashboard
-  if (token && isPublicRoute) {
+  if (token && pathname === '/') {
     // TODO: Decode JWT role claim and route to the correct dashboard
     // For now, default to /aluno
     const dashboardUrl = new URL('/aluno', request.url);
