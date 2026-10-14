@@ -4,10 +4,10 @@ version = "1.0.0"
 description = "Backend for Carteira Estudantil Web IFPE"
 requires-python = ">=3.11"
 dependencies = [
-    "fastapi==0.142.2",
+    "fastapi==0.143.0",
     "uvicorn[standard]==0.54.0",
-    "sqlalchemy==2.1.2",
-    "pydantic==2.13.5",
+    "sqlalchemy==2.1.4",
+    "pydantic==2.14.0",
     "pydantic-settings==2.15.0",
     "python-multipart==0.0.32",
     "httpx2==2.13.1",
@@ -18,6 +18,7 @@ dependencies = [
     "psycopg==3.3.6",
     "authlib==1.8.0",
     "itsdangerous>=2.2.0",
+    "alembic>=1.20.0",
 ]
 
 [dependency-groups]
@@ -78,6 +79,8 @@ target-version = "py311"
 
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["S101"]
+# Ignoramos E501 nas migrações pois as declarações sa.Column do Alembic frequentemente ultrapassam 88 chars.
+"alembic/versions/*" = ["E501"]
 
 [tool.ruff.format]
 quote-style = "double"

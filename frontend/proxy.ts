@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 // Routes that don't require authentication
-const publicRoutes = ['/', '/admin', '/admin/movimentacoes', '/admin/leitor', '/admin/editar', '/admin/alunos', '/aluno', '/aluno/carteira'];
+const publicRoutes = ['/', '/admin', '/admin/movimentacoes', '/admin/editar', '/admin/alunos', '/admin/aluno', '/mobile/carteira', '/mobile/leitor' ];
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -30,10 +30,10 @@ export function proxy(request: NextRequest) {
   }
 
   // If already authenticated and trying to access the login page → redirect to dashboard
-  if (token && isPublicRoute) {
+  if (token && pathname === '/') {
     // TODO: Decode JWT role claim and route to the correct dashboard
     // For now, default to /aluno
-    const dashboardUrl = new URL('/aluno', request.url);
+    const dashboardUrl = new URL('/admin', request.url);
     return NextResponse.redirect(dashboardUrl);
   }
 
