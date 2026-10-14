@@ -2,7 +2,7 @@
 
 ## Validação
 
-`ci.yml` coordena o workflow reutilizável `quality.yml`. Backend (Ruff e pytest com PostgreSQL descartável), frontend (TypeScript e build) e SAST executam em paralelo. Só depois são construídas as imagens, com cache separado por componente, e executados os scans de container.
+`ci.yml` coordena o workflow reutilizável `quality.yml`. Backend (Ruff e pytest com PostgreSQL descartável e banco de testes separado), frontend (TypeScript e build) e SAST executam em paralelo. Só depois são construídas as imagens, com cache separado por componente, e executados os scans de container.
 
 Semgrep usa CLI com `--error --strict`, conjuntos OWASP Top 10/security-audit e sem token de serviço. Bandit mantém a política anterior de severidade e confiança médias ou altas. Os dois scanners podem bloquear a execução. Os relatórios são preservados mesmo em falha, quando gerados.
 

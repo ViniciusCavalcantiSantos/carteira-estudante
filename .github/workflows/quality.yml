@@ -60,6 +60,17 @@ jobs:
         run: uv sync --locked
       - name: Ruff
         run: uv run --no-sync ruff check .
+      - name: Create isolated test database
+        run: |
+          uv run --no-sync python - <<'PY'
+          import psycopg
+
+          with psycopg.connect(
+              "postgresql://postgres:postgres@localhost:5432/postgres",
+              autocommit=True,
+          ) as connection:
+              connection.execute("CREATE DATABASE carteira_test_test")
+          PY
       - name: Test against isolated PostgreSQL
         run: uv run --no-sync pytest --junitxml=pytest-results.xml
       - name: Preserve test results
