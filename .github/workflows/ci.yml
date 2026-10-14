@@ -136,6 +136,8 @@ jobs:
           context: ./frontend
           load: true 
           tags: carteira-frontend:latest
+          build-args: |
+            NEXT_PUBLIC_API_URL=${{ vars.NEXT_PUBLIC_API_URL }}
           cache-from: type=gha,scope=${{ github.workflow }}-frontend-trivy
           cache-to: type=gha,mode=max,scope=${{ github.workflow }}-frontend-trivy
 
@@ -157,5 +159,7 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta-frontend.outputs.tags }}
           labels: ${{ steps.meta-frontend.outputs.labels }}
+          build-args: |
+            NEXT_PUBLIC_API_URL=${{ vars.NEXT_PUBLIC_API_URL }}
           cache-from: type=gha,scope=${{ github.workflow }}-frontend-push
           cache-to: type=gha,mode=max,scope=${{ github.workflow }}-frontend-push
