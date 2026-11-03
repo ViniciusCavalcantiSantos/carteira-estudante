@@ -160,3 +160,22 @@ jobs:
             NEXT_PUBLIC_API_URL=${{ vars.NEXT_PUBLIC_API_URL }}
           cache-from: type=gha,scope=${{ github.workflow }}-frontend-push
           cache-to: type=gha,mode=max,scope=${{ github.workflow }}-frontend-push
+
+  deploy-prod:
+    name: CD - Deploy na Oracle VM
+    runs-on: ubuntu-latest
+    needs: build-infra
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    
+    steps:
+      - name: Conectar via SSH e atualizar contêineres
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.ORACLE_HOST }}
+          username: ${{ secrets.ORACLE_USERNAME }}
+          key: ${{ secrets.ORACLE_SSH_KEY }}
+          script: |
+            cd ~/carteira-estudantil
+            sudo docker compose -f docker-compose.prod.yml pull
+            sudo docker compose -f docker-compose.prod.yml up -d
+            sudo docker image prune -f
