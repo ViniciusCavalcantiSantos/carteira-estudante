@@ -102,3 +102,22 @@ jobs:
       source_sha: ${{ needs.source.outputs.sha }}
       version: ${{ needs.release.outputs.tag || needs.source.outputs.tag }}
       publish_latest: ${{ github.event_name == 'push' }}
+
+  deploy-prod:
+    name: CD - Deploy na Oracle VM
+    needs: publish
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Deploy validated release
+        uses: appleboy/ssh-action@0ff4204d59e8e51228ff73bce53f80d53301dee2
+        with:
+          host: ${{ secrets.ORACLE_HOST }}
+          username: ${{ secrets.ORACLE_USERNAME }}
+          key: ${{ secrets.ORACLE_SSH_KEY }}
+          script: |
+            cd ~/carteira-estudantil
+            sudo docker compose -f docker-compose.prod.yml pull
+            sudo docker compose -f docker-compose.prod.yml up -d
+            sudo docker image prune -f

@@ -6,7 +6,7 @@ Esta automação complementa os workflows reutilizáveis de qualidade e publica�
 
 O ponto de partida é a release institucional `v0.2.0`, não a release de demonstração do fork. `bootstrap-sha` aponta para o commit dessa tag (`3a856eadd814e27ba6c339e0081e972d5547eb2c`), delimitando o histórico do primeiro changelog. Revise esse changelog antes de aprovar a primeira release. Se outra release institucional for publicada antes da integração, atualize o manifesto, `version.txt` e o ponto de bootstrap antes do merge.
 
-**Mudança de comportamento:** um merge comum na `main` deixa de publicar imagens e de atualizar `latest`. Ele valida o código e alimenta um PR de release. A publicação acontece depois que um mantenedor aprova e mescla esse PR. Pushes manuais de tags também deixam de iniciar o publicador antigo. Os nomes dos pacotes permanecem os mesmos, mas consumidores de `latest` passam a receber apenas releases estáveis. Este workflow não faz deploy automaticamente.
+**Mudança de comportamento:** um merge comum na `main` deixa de publicar imagens e de atualizar `latest`. Ele valida o código e alimenta um PR de release. A publicação acontece depois que um mantenedor aprova e mescla esse PR. Pushes manuais de tags também deixam de iniciar o publicador antigo. Os nomes dos pacotes permanecem os mesmos, mas consumidores de `latest` passam a receber apenas releases estáveis. Após a publicação aprovada de uma nova release, o workflow executa o deploy existente na Oracle VM, usando ORACLE_HOST, ORACLE_USERNAME e ORACLE_SSH_KEY. Execuções manuais de recuperação não fazem deploy.
 
 ## Exemplo de ponta a ponta
 
